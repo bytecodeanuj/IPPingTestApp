@@ -1,0 +1,26 @@
+.ScanIPBtn {
+	-fx-background-color: #9424F0;
+	-fx-border-radius: 20;
+	-fx-background-radius: 20;
+}
+
+.ScanIPBtn:hover {
+	-fx-background-color: #BD297A;
+}
+
+.ScanIPBtn:pressed {
+	-fx-background-color: #FDAF7F;
+}
+
+.ChooseBtn {
+	-fx-background-color: #5784ec;
+	-fx-background-radius: 5;
+}
+
+.ChooseBtn:hover {
+	-fx-background-color: #BD297A;
+}
+
+.ChooseBtn:pressed {
+	-fx-background-color: #FDAF7F;
+}
