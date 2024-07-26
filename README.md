@@ -23,14 +23,15 @@ The **IPPingTestApp** is a JavaFX-based application designed to check a list of 
 ## Usage
 
 ### GUI Overview
-
-1. **File Input**:
+1. **Downlaod the IPPingTestAppRevised.Jar file and Run it**
+   
+2. **File Input**:
    - Click on the "Choose IP List" button to select a file containing IP addresses with comma separated.
 
-2. **Start Scan**:
+3. **Start Scan**:
    - Click the "Test IP" button to begin scanning the IP addresses.
 
-3. **Result Display**:
+4. **Result Display**:
    - The results will be displayed in a table format within the application window.
 
 ### Input File Format
