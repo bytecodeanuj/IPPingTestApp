@@ -12,7 +12,12 @@ import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -64,7 +69,6 @@ public class HomeController implements Initializable {
         unreachableTextArea.clear();
         reachableTextArea.clear();
         fileChooser = new FileChooser();
-        //
         try
         {
             chooseBtn.setDisable(true);
@@ -74,9 +78,8 @@ public class HomeController implements Initializable {
             {// condition for file choosen success 
                 FileChooseStatusLabel.setText(file.getName());
                 chooseBtn.setDisable(false);
-  
-                
-            } else // condition for cancel the dailog or no file choosen
+
+            } else // condition for cancel the dailog or no file choosen 
             {
                 Notifications.create().darkStyle().owner(container).title("No File Choosen..").showError();
                 FileChooseStatusLabel.setText("No File Choosen...");
@@ -93,46 +96,47 @@ public class HomeController implements Initializable {
 
     @FXML
     private void ScanIPs(ActionEvent event) {
-        ScanIPBtn.setDisable(true);
-        if (file != null)
-        {
-            try (BufferedReader br = new BufferedReader(new FileReader(file)))
-            {
-                String line;
-                while ((line = br.readLine()) != null){
-                    String[] ips = line.split(",");
-                    int totalIPs = ips.length;
-                    double progress = 0;
-                    progressBar.setProgress(progress);
-                    
-                    for (String ip : ips){
-                        ip = ip.trim();
-                        if (!ip.isEmpty()){
+       clearBothTextFields();
+        if (file != null){
+            try{
+                BufferedReader br = new BufferedReader(new FileReader(file));
+                String ips[] = br.readLine().split(",");
+                ExecutorService executor = Executors.newFixedThreadPool(10); // Adjust thread pool size if needed
 
-                            boolean reachable = isReachable(ip);
-                            
-                           
-                            
-                            if (reachable){
-                                reachableTextArea.setText(reachableTextArea.getText().concat(ip+"\n"));
-                            }else{
-                                unreachableTextArea.setText(unreachableTextArea.getText().concat(ip+"\n"));
-                            }
-                          
-                            progressBar.setProgress(100);
-                              
-//                            textArea.setText(logs);
-                        }
+            Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                for (int i = 0; i < ips.length; i++) {
+                    final int progress = i + 1;
+                    ips[i]=ips[i].trim();
+                    if(isReachable(ips[i])){
+                        reachableTextArea.setText(reachableTextArea.getText().concat(ips[i]+"\n"));
+                    }else{
+                        unreachableTextArea.setText(unreachableTextArea.getText().concat(ips[i]+"\n"));
                     }
+                    
+                    updateProgress(progress, ips.length);
+//                    updateMessage("Checked " + progress + " IPs");
+                    Thread.sleep(100); // Optional: sleep to simulate progress
                 }
-            } catch (IOException e)
-            {
-                e.printStackTrace();
-
-                Notifications.create().darkStyle().owner(container).text("Please select valid IP File").showError();
+                executor.shutdown();
+                return null;
             }
-        } else
-        {
+        };
+            progressBar.progressProperty().bind(task.progressProperty());
+            ScanIPBtn.setDisable(true);
+            new Thread(task).start();
+//            task.setOnSucceeded(null);
+//            task.setOnFailed(null);
+//            task.getException().printStackTrace();
+
+            } catch (Exception e)
+            {
+                Notifications.create().darkStyle().owner(container).title("App Crashed").text("Please choose a valid IP List").showError();
+                System.exit(0);
+                e.printStackTrace();
+            }
+        }else{
             Notifications.create().darkStyle().owner(container).text("Please select IP File first").showInformation();
         }
         ScanIPBtn.setDisable(false);
@@ -143,10 +147,16 @@ public class HomeController implements Initializable {
         {
             InetAddress address = InetAddress.getByName(ip);
             return address.isReachable(10000); // Timeout in milliseconds
-        } catch (IOException e)
+        } catch (Exception e)
         {
+            e.printStackTrace();
             return false;
         }
+    }
+    
+    private void clearBothTextFields(){
+        reachableTextArea.clear();
+        unreachableTextArea.clear();
     }
 
     @FXML
@@ -155,6 +165,7 @@ public class HomeController implements Initializable {
         unreachableTextArea.clear();
         file = null;
         FileChooseStatusLabel.setText("No File Choosen...");
+        progressBar.progressProperty().unbind();
         progressBar.setProgress(0);
     }
 
@@ -172,7 +183,7 @@ public class HomeController implements Initializable {
             Desktop.getDesktop().browse(uri);
         } catch (Throwable e)
         {
-            JOptionPane.showMessageDialog(null, "Error on opening link '{}' in system browser.");
+            JOptionPane.showMessageDialog(null, "Error on opening link {https://github.com/bytecodeanuj} in system browser.");
             e.printStackTrace();
         }
 
@@ -180,6 +191,7 @@ public class HomeController implements Initializable {
 
     @FXML
     private void getAppDetails(ActionEvent event) {
+        
     }
 
 }
