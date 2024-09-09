@@ -7,6 +7,10 @@
 
 The **IPPingTestApp** is a JavaFX-based application designed to check a list of IP addresses to check their availability. Users provide a list of IP addresses in text format, and the application checks each IP address for reachability, displaying results in the application window.
 
+## Screenshot
+![IPPingTestApp SS](https://github.com/user-attachments/assets/bba040b4-a3fc-4ec2-902d-e75eed95a4c4)
+
+
 ## Features
 
 - **Graphical User Interface (GUI)**: Built using JavaFX for an intuitive user experience.
