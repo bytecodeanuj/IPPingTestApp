@@ -80,7 +80,7 @@
                </effect></TextArea>
             <Button fx:id="chooseBtn" layoutX="14.0" layoutY="502.0" mnemonicParsing="false" onAction="#ChooseIPList" prefHeight="31.0" prefWidth="123.0" styleClass="ChooseBtn" stylesheets="@css/style.css" text="Choose IP List" />
             <Label fx:id="FileChooseStatusLabel" layoutX="144.0" layoutY="508.0" prefHeight="18.0" prefWidth="150.0" text="No File Choosen..." />
-            <JFXButton fx:id="ScanIPBtn" buttonType="RAISED" layoutX="357.0" layoutY="545.0" onAction="#ScanIPs" prefHeight="46.0" prefWidth="150.0" ripplerFill="#aaa2ab" styleClass="ScanIPBtn" stylesheets="@css/style.css" text="Scan IPs" textFill="WHITE" textOverrun="CLIP">
+            <JFXButton fx:id="ScanIPBtn" buttonType="RAISED" layoutX="357.0" layoutY="545.0" onAction="#ScanIPs" prefHeight="46.0" prefWidth="150.0" ripplerFill="#aaa2ab" styleClass="ScanIPBtn" stylesheets="@css/style.css" text="Test IPs" textFill="WHITE" textOverrun="CLIP">
                <effect>
                   <DropShadow />
                </effect>
