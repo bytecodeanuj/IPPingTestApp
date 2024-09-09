@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<jnlp spec="1.0" xmlns:jfx="http://javafx.com" href="IPPingTestApp.jnlp">
+  <information>
+    <title>IPPingTestApp</title>
+    <vendor>ANUJ KUMAR</vendor>
+    <description>null</description>
+    <offline-allowed/>
+  </information>
+  <resources>
+    <j2se version="1.6+" href="http://java.sun.com/products/autodl/j2se"/>
+    <jar href="IPPingTestApp.jar" size="155362" download="eager" />
+    <jar href="lib\controlsfx-8.40.15.jar" size="1402490" download="eager" />
+    <jar href="lib\fontawesomefx-8.9.jar" size="571068" download="eager" />
+    <jar href="lib\jfoenix-8.0.10.jar" size="2710207" download="eager" />
+  </resources>
+  <jfx:javafx-desc  width="800" height="600" main-class="com.bytecodeanuj.ippingtestapp.App"  name="IPPingTestApp" />
+  <update check="always"/>
+</jnlp>
