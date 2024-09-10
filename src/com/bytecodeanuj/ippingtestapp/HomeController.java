@@ -1,33 +1,29 @@
 package com.bytecodeanuj.ippingtestapp;
 
-import com.jfoenix.controls.JFXDialog;
-import com.jfoenix.controls.JFXPopup;
 import com.jfoenix.controls.JFXProgressBar;
 import java.awt.Desktop;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.io.IOException;
 import java.net.InetAddress;
 import java.net.URI;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
+import sun.misc.Contended;
+
 import javax.swing.JOptionPane;
 import org.controlsfx.control.Notifications;
 
@@ -100,9 +96,29 @@ public class HomeController implements Initializable {
         if (file != null){
             try{
                 BufferedReader br = new BufferedReader(new FileReader(file));
-                String ips[] = br.readLine().split(",");
+                String line;
+                StringBuilder fileContent = new StringBuilder();
+                
+                while ((line=br.readLine())!=null) {
+                	//adding comma at the end of the each line
+                	fileContent.append(line).append(",");
+				}
+                
+                String ipContent = fileContent.toString();
+                
+                if (ipContent.endsWith(",")) {
+                	ipContent = ipContent.substring(0, ipContent.length() - 1);
+                }
+                
+                String ips[] = ipContent.split(",");
+                
+                
+                for(String ip:ips) {
+                	System.out.println(ip);
+                }
+                
                 ExecutorService executor = Executors.newFixedThreadPool(10); // Adjust thread pool size if needed
-
+                br.close();
             Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
@@ -140,15 +156,17 @@ public class HomeController implements Initializable {
             Notifications.create().darkStyle().owner(container).text("Please select IP File first").showInformation();
         }
         ScanIPBtn.setDisable(false);
+        
     }
 
-    public static boolean isReachable(String ip) {
+    public boolean isReachable(String ip) {
         try
         {
             InetAddress address = InetAddress.getByName(ip);
             return address.isReachable(10000); // Timeout in milliseconds
         } catch (Exception e)
         {
+        	Notifications.create().darkStyle().owner(container).title("Invalid Input file").text("Please Choose a valid IP file");
             e.printStackTrace();
             return false;
         }
